@@ -1,7 +1,7 @@
 # Modules
 import numpy as np
 import itertools
-from random import randint
+from random import randint, random
 
 # Paramètres initiaux
 n = 10 #taille du système
@@ -45,7 +45,7 @@ def moment(tab_config):
 			mu_tot += tab_config[i, j]
 	return mu_tot
 	
-def capacité_thermique(tab_config):
+def capacité_thermique(tab_config,T):
 	liste_E = []
 	for i in range(n):
 		for j in range(n):
@@ -57,17 +57,18 @@ def capacité_thermique(tab_config):
 	
 # Algorithme
 ## Initialisation
-tab_config = np.ones(n)
-for dipôle in tab_config:
-	if randint(0, 1):
-		dipôle = -1
+tab_config = np.ones((n,n))
+for i in range(n):
+	for j in range(n):
+		if randint(0, 1):
+			tab_config[(i,j)] = -1
 
 ## Itération : on parcourt l'espace des états accessibles
-liste_énergies = []
-liste_capacités_thermiques = []
-liste_moments = []
 
 def Monte_Carlo(T):
+	liste_énergies = []
+	liste_capacités_thermiques = []
+	liste_moments = []
 	for pas in range(nb_pas):
 		i = random.randint(0, n - 1)
 		j = random.randint(0, n - 1)
@@ -82,8 +83,8 @@ def Monte_Carlo(T):
 			if random() < P:
 				tab_config[i, j]*=-1
 		liste_énergies.append(énergie(tab_config))
-		liste_capacités_thermiques.append(moment(tab_config))
-		liste_moments.append(capacité_thermique(tab_config))
+		liste_capacités_thermiques.append(capacité_thermique(tab_config,T))
+		liste_moments.append(moment(tab_config))
 	return np.mean(liste_énergies), np.mean(liste_capacités_thermiques), np.mean(liste_moments)
 
 """
