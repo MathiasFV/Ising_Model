@@ -7,7 +7,7 @@ n = 10  # taille du système
 B = 0.2  # champ magnétique adimensionné
 T_min = 0.01  # température adimensionnée
 T_max = 10  # température adimensionnée
-nb_pas = 10000  # nombre d'étapes
+nb_pas = 50000  # nombre d'étapes
 
 #Paramètres Question 2
 resultats_Q2= []
@@ -113,7 +113,7 @@ def Question_1(T, nb_iters):
     ax[0].plot(iter_values, energies, label='Énergie')
     ax[0].set_title(f"Convergence des grandeurs pour T = {T}")
     ax[0].set_ylabel('$E$')
-    ax[0].set_yscale('log')
+ #   ax[0].set_yscale('log')
     ax[0].grid(visible=True, which="both")
     ax[0].legend()
 
@@ -121,6 +121,7 @@ def Question_1(T, nb_iters):
     ax[1].plot(iter_values, moments, label='Moment magnétique', color='green')
     ax[1].set_ylabel('$\mu$')
     ax[1].grid(visible=True, which="both")
+#    ax[1].set_yscale('log')
     ax[1].legend()
 
     # Tracé de la capacité thermique
@@ -128,15 +129,12 @@ def Question_1(T, nb_iters):
     ax[2].set_ylabel('$c_v$')
     ax[2].set_xlabel('Nombre d\'itérations')
     ax[2].grid(visible=True, which="both")
+    ax[2].set_yscale('log')
     ax[2].legend()
 
     plt.tight_layout()
     plt.savefig('Q1.pdf', bbox_inches="tight")
     plt.close()
-
-# Appel de la question 1 pour tester la convergence à une température donnée
-
-Question_1(T=1,nb_iters=nb_pas)
 
 # Question 2 : Évolution des grandeurs en fonction de la température
 def Question_2():
@@ -174,5 +172,5 @@ def Question_2():
     plt.tight_layout()
     plt.show()
 
-# Appel de la Question 2 pour tracer les grandeurs en fonction de la température
-#Question_2()
+
+Question_1(T=1,nb_iters=nb_pas)
