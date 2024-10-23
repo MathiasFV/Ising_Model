@@ -109,20 +109,20 @@ def Question_1(T, nb_iters):
 
     # Tracé de l'énergie
     plt.subplot(3, 1, 1)
-    plt.plot(range(iter_values), energies, label='Énergie')
+    plt.plot(iter_values, energies, label='Énergie')
     plt.title(f"Convergence des grandeurs pour T = {T}")
     plt.ylabel('Énergie')
     plt.legend()
 
     # Tracé du moment magnétique
     plt.subplot(3, 1, 2)
-    plt.plot(range(nb_iters), moments, label='Moment magnétique', color='green')
+    plt.plot(iter_values, moments, label='Moment magnétique', color='green')
     plt.ylabel('Moment')
     plt.legend()
 
     # Tracé de la capacité thermique
     plt.subplot(3, 1, 3)
-    plt.plot(range(nb_iters), capacites, label='Capacité Thermique', color='orange')
+    plt.plot(iter_values, capacites, label='Capacité Thermique', color='orange')
     plt.ylabel('Capacité thermique')
     plt.xlabel('Nombre d\'itérations')
     plt.legend()
