@@ -77,13 +77,13 @@ def Monte_Carlo(T,nb_pas_MC,B, n):
 		delta_mu = -2*tab_config[i, j]
 		delta_E = -B*delta_mu
 		for (k, l) in dic_voisins[(i, j)]:
-		    delta_E += delta_mu*tab_config[k, l]
+			delta_E += delta_mu*tab_config[k, l]
 		if delta_E < 0:
-		    tab_config[i, j] *= -1
+			tab_config[i, j] *= -1
 		else:
-		    P = np.exp(-delta_E/T)
-		    if random() < P:
-		        tab_config[i, j] *= -1
+			P = np.exp(-delta_E/T)
+			if random() < P:
+				tab_config[i, j] *= -1
 		liste_énergies.append(énergie(tab_config,dic_voisins,B))
 		liste_moments.append(moment(tab_config))
 		liste_capacités_thermiques.append(capacité_thermique(tab_config, dic_voisins, T,B))
@@ -96,7 +96,7 @@ def Question_1(T, nb_pas_MC_max, B, n):
 	moments = []
 	capacites = []
 
-	iter_values = np.linspace(100, nb_pas_MC_max, 10)
+	iter_values = np.linspace(100, nb_pas_MC_max, 20)
 
 	for nb_pas_MC in iter_values:
 		nb_pas_MC = int(nb_pas_MC)
@@ -105,8 +105,8 @@ def Question_1(T, nb_pas_MC_max, B, n):
 		moments.append(M)
 		capacites.append(C)
 
-		fig, ax = plt.subplots(3,1, sharex=True, figsize=(10,9))
-		fig.tight_layout(h_pad=2, w_pad=2)
+	fig, ax = plt.subplots(3,1, sharex=True, figsize=(10,9))
+	fig.tight_layout(h_pad=2, w_pad=2)
     
 
     # Tracé de l'énergie
@@ -135,7 +135,49 @@ def Question_1(T, nb_pas_MC_max, B, n):
 	plt.tight_layout()
 	plt.savefig('Q1.pdf', bbox_inches="tight")
 	plt.close()
+	
+def Question_2(T_min, T_max, nb_pas_MC, B, n):
+	energies = []
+	moments = []
+	capacites = []
+	
+	temperatures = np.linspace(T_min, T_max, 10)
+	
+	for T in temperatures:
+		print('T =',T)
+		E, C, M = Monte_Carlo(T,nb_pas_MC,B, n)
+		energies.append(E)
+		moments.append(M)
+		capacites.append(C)
+
+	fig, ax = plt.subplots(3,1, sharex=True, figsize=(10,9))
+	fig.tight_layout(h_pad=2, w_pad=2)
+    
+
+    # Tracé de l'énergie
+	ax[0].plot(temperatures, energies)
+	ax[0].set_ylabel('$E$')
+ #   ax[0].set_yscale('log')
+	ax[0].grid(visible=True, which="both")
+
+    # Tracé du moment magnétique
+	ax[1].plot(temperatures, moments, color='green')
+	ax[1].set_ylabel(r'$\mu$')
+	ax[1].grid(visible=True, which="both")
+#    ax[1].set_yscale('log')
+
+	# Tracé de la capacité thermique
+	ax[2].plot(temperatures, capacites, color='orange')
+	ax[2].set_ylabel('$c_v$')
+	ax[2].set_xlabel('T')
+	ax[2].grid(visible=True, which="both")
+	ax[2].set_yscale('log')
+
+	plt.tight_layout()
+	plt.savefig('Q2.pdf', bbox_inches="tight")
+	plt.close()
+		
 
 
-Question_1(T=1,nb_pas_MC_max=50000,B = 0.2, n=10)
-
+#Question_1(T=1,nb_pas_MC_max=50000,B = 0.2, n=10)
+Question_2(T_min=0.1, T_max=10, nb_pas_MC=50000, B=0.2, n=10)
