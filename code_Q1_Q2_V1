@@ -7,7 +7,7 @@ n = 10  # taille du système
 B = 0.2  # champ magnétique adimensionné
 T_min = 0.01  # température adimensionnée
 T_max = 10  # température adimensionnée
-nb_pas = 100  # nombre d'étapes
+nb_pas = 1000  # nombre d'étapes
 
 #Paramètres Question 2
 resultats_Q2= []
@@ -66,12 +66,12 @@ for i in range(n):
             tab_config[i, j] = -1
 
 ## Itération : on parcourt l'espace des états accessibles
-def Monte_Carlo(T):
+def Monte_Carlo(T,nb_pas_MC):
     liste_énergies = []
     liste_capacités_thermiques = []
     liste_moments = []
 
-    for pas in range(nb_pas):
+    for pas in range(nb_pas_MC):
         i = randint(0, n - 1)
         j = randint(0, n - 1)
         delta_mu = -2*tab_config[i, j]
@@ -96,17 +96,20 @@ def Question_1(T, nb_iters):
     moments = []
     capacites = []
 
-    for _ in range(nb_iters):
-        E, C, M = Monte_Carlo(T)
-        energies.append(E)
-        moments.append(M)
-        capacites.append(C)
+    iter_values = np.linspace(100, nb_iters, 10)
+
+    for nb_iter in iter_values:
+      nb_iter = int(nb_iter)
+      E, C, M = Monte_Carlo(T,nb_iter)
+      energies.append(E)
+      moments.append(M)
+      capacites.append(C)
 
     plt.figure(figsize=(12, 8))
 
     # Tracé de l'énergie
     plt.subplot(3, 1, 1)
-    plt.plot(range(nb_iters), energies, label='Énergie')
+    plt.plot(range(iter_values), energies, label='Énergie')
     plt.title(f"Convergence des grandeurs pour T = {T}")
     plt.ylabel('Énergie')
     plt.legend()
@@ -128,7 +131,8 @@ def Question_1(T, nb_iters):
     plt.show()
 
 # Appel de la question 1 pour tester la convergence à une température donnée
-Question_1(T=2, nb_iters=100)
+
+Question_1(T=1,nb_iters=nb_pas)
 
 # Question 2 : Évolution des grandeurs en fonction de la température
 def Question_2():
