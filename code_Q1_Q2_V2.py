@@ -7,7 +7,7 @@ n = 10  # taille du système
 B = 0.2  # champ magnétique adimensionné
 T_min = 0.01  # température adimensionnée
 T_max = 10  # température adimensionnée
-nb_pas = 1000  # nombre d'étapes
+nb_pas = 10000  # nombre d'étapes
 
 #Paramètres Question 2
 resultats_Q2= []
@@ -105,30 +105,34 @@ def Question_1(T, nb_iters):
       moments.append(M)
       capacites.append(C)
 
-    plt.figure(figsize=(12, 8))
+    fig, ax = plt.subplots(3,1, sharex=True, figsize=(10,9))
+    fig.tight_layout(h_pad=2, w_pad=2)
+    
 
     # Tracé de l'énergie
-    plt.subplot(3, 1, 1)
-    plt.plot(iter_values, energies, label='Énergie')
-    plt.title(f"Convergence des grandeurs pour T = {T}")
-    plt.ylabel('Énergie')
-    plt.legend()
+    ax[0].plot(iter_values, energies, label='Énergie')
+    ax[0].set_title(f"Convergence des grandeurs pour T = {T}")
+    ax[0].set_ylabel('$E$')
+    ax[0].set_yscale('log')
+    ax[0].grid(visible=True, which="both")
+    ax[0].legend()
 
     # Tracé du moment magnétique
-    plt.subplot(3, 1, 2)
-    plt.plot(iter_values, moments, label='Moment magnétique', color='green')
-    plt.ylabel('Moment')
-    plt.legend()
+    ax[1].plot(iter_values, moments, label='Moment magnétique', color='green')
+    ax[1].set_ylabel('$\mu$')
+    ax[1].grid(visible=True, which="both")
+    ax[1].legend()
 
     # Tracé de la capacité thermique
-    plt.subplot(3, 1, 3)
-    plt.plot(iter_values, capacites, label='Capacité Thermique', color='orange')
-    plt.ylabel('Capacité thermique')
-    plt.xlabel('Nombre d\'itérations')
-    plt.legend()
+    ax[2].plot(iter_values, capacites, label='Capacité Thermique', color='orange')
+    ax[2].set_ylabel('$c_v$')
+    ax[2].set_xlabel('Nombre d\'itérations')
+    ax[2].grid(visible=True, which="both")
+    ax[2].legend()
 
     plt.tight_layout()
-    plt.show()
+    plt.savefig('Q1.pdf', bbox_inches="tight")
+    plt.close()
 
 # Appel de la question 1 pour tester la convergence à une température donnée
 
