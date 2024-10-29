@@ -1,35 +1,10 @@
-# Modules
 import numpy as np
-import itertools
+import matplotlib.pyplot as plt
 from random import randint, random
 
-# Paramètres initiaux
-n = 10 #taille du système
-B = 0.2 #champ magnétique adimensionné
-T_min = 0.1 #température adimensionnée
-T_max = 10 #température adimensionnée
-nb_pas = 100 #nombre d'étapes
-
-dic_voisins = {}
-for i in range(n):
-	for j in range(n):
-		dic_voisins[(i,j)] = []
-		liste_voisins_i, liste_voisins_j = [], []
-		if -1 < i-1 < n:
-			liste_voisins_i.append(i-1)
-		if -1 < i+1 < n:
-			liste_voisins_i.append(i+1)
-		if -1 < j-1 < n:
-			liste_voisins_j.append(j-1)
-		if -1 < j+1 < n:
-			liste_voisins_j.append(j+1)
-		for voisin_i in liste_voisins_i:
-			dic_voisins[(i,j)].append((voisin_i, j))
-		for voisin_j in liste_voisins_j:
-			dic_voisins[(i,j)].append((i, voisin_j))
-
 # Fonctions auxiliaires
-def énergie(tab_config):
+def énergie(tab_config,dic_voisins,B):
+	n = len(tab_config[0])
 	E_tot = 0
 	for i in range(n):
 		for j in range(n):
@@ -37,15 +12,17 @@ def énergie(tab_config):
 			for (k,l) in dic_voisins[(i,j)]:
 				E_tot += 0.5*tab_config[k,l]*tab_config[i, j]
 	return E_tot
-	
+
 def moment(tab_config):
+	n = len(tab_config[0])
 	mu_tot = 0
 	for i in range(n):
 		for j in range(n):
 			mu_tot += tab_config[i, j]
 	return mu_tot
-	
-def capacité_thermique(tab_config,T):
+
+def capacité_thermique(tab_config, dic_voisins, T, B):
+	n = len(tab_config[0])
 	liste_E = []
 	for i in range(n):
 		for j in range(n):
@@ -54,40 +31,56 @@ def capacité_thermique(tab_config,T):
 				E += 0.5*tab_config[k,l]*tab_config[i, j]
 			liste_E.append(E)
 	return np.var(liste_E)/(T**2)
+
+# Algorithme Monte Carlo
+
+def Monte_Carlo(T,nb_pas_MC,B, n):
+	## Initialisation
+	tab_config = np.ones((n, n))
+	for i in range(n):
+		for j in range(n):
+			if randint(0, 1):
+				tab_config[i, j] = -1
 	
-# Algorithme
-## Initialisation
-tab_config = np.ones((n,n))
-for i in range(n):
-	for j in range(n):
-		if randint(0, 1):
-			tab_config[(i,j)] = -1
-
-## Itération : on parcourt l'espace des états accessibles
-
-def Monte_Carlo(T):
+	dic_voisins = {}
+	for i in range(n):
+		for j in range(n):
+			dic_voisins[(i, j)] = []
+			liste_voisins_i, liste_voisins_j = [], []
+			if -1 < i-1 < n:
+				liste_voisins_i.append(i-1)
+			if -1 < i+1 < n:
+				liste_voisins_i.append(i+1)
+			if -1 < j-1 < n:
+				liste_voisins_j.append(j-1)
+			if -1 < j+1 < n:
+				liste_voisins_j.append(j+1)
+			for voisin_i in liste_voisins_i:
+				dic_voisins[(i, j)].append((voisin_i, j))
+			for voisin_j in liste_voisins_j:
+				dic_voisins[(i, j)].append((i, voisin_j))
+   
 	liste_énergies = []
 	liste_capacités_thermiques = []
 	liste_moments = []
-	for pas in range(nb_pas):
-		i = random.randint(0, n - 1)
-		j = random.randint(0, n - 1)
+
+	## Itération : on parcourt l'espace des états accessibles
+	for pas in range(nb_pas_MC):
+		i = randint(0, n - 1) # Choix aléatoire d'un état à proposer à la modification
+		j = randint(0, n - 1)
 		delta_mu = -2*tab_config[i, j]
 		delta_E = -B*delta_mu
-		for (k,l) in dic_voisins[(i,j)]:
-			delta_E+=delta_mu*tab_config[k,l]
-		if delta_E < 0 :
-			tab_config[i, j]*=-1
+		for (k, l) in dic_voisins[(i, j)]:
+			delta_E += 0.5*delta_mu*tab_config[k, l]
+		if delta_E < 0:
+			tab_config[i, j] *= -1 # Le changement est systématiquement accepté s'il induit une baisse de l'énergie du système.
 		else:
 			P = np.exp(-delta_E/T)
-			if random() < P:
-				tab_config[i, j]*=-1
-		liste_énergies.append(énergie(tab_config))
-		liste_capacités_thermiques.append(capacité_thermique(tab_config,T))
+			if random() < P: # Sinon, il peut être accepté ou refusé selon une probabilité décroissant avec l'augmentation de l'énergie qu'il induit.
+				tab_config[i, j] *= -1
+		liste_énergies.append(énergie(tab_config,dic_voisins,B))
 		liste_moments.append(moment(tab_config))
+		liste_capacités_thermiques.append(capacité_thermique(tab_config, dic_voisins, T,B))
+
 	return np.mean(liste_énergies), np.mean(liste_capacités_thermiques), np.mean(liste_moments)
 
-"""
-def Question_2():
-	for T in np.linspace(T_min, T_max, 1000):
-"""
