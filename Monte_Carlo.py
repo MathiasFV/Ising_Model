@@ -15,11 +15,11 @@ def énergie(tab_config,dic_voisins,B):
 
 def moment(tab_config):
 	n = len(tab_config[0])
-	mu_tot = 0
+	liste_mu = []
 	for i in range(n):
 		for j in range(n):
-			mu_tot += tab_config[i, j]
-	return mu_tot
+			liste_mu.append(tab_config[i, j])
+	return mean(liste_mu)
 
 def capacité_thermique(tab_config, dic_voisins, T, B):
 	n = len(tab_config[0])

@@ -7,11 +7,11 @@ def Question_1(T, nb_pas_MC_max, B, n):
 	moments = []
 	capacites = []
 
-	iter_values = np.linspace(100, nb_pas_MC_max, 20)
+	iter_values = np.linspace(100, nb_pas_MC_max, 40)
 
 	for nb_pas_MC in iter_values:
-		print('nb_pas_MC = ',nb_pas_MC)
 		nb_pas_MC = int(nb_pas_MC)
+		print('nb_pas_MC = ',nb_pas_MC)
 		E, C, M = Monte_Carlo(T,nb_pas_MC,B, n)
 		energies.append(E)
 		moments.append(M)
@@ -48,4 +48,4 @@ def Question_1(T, nb_pas_MC_max, B, n):
 	plt.savefig('Figures/Q1_T='+str(T)+'_nb_pas_MC_max='+str(nb_pas_MC_max)+'_B='+str(B)+'_n='+str(n)+'.pdf', bbox_inches="tight")
 	plt.close()
 	
-Question_1(T=10,nb_pas_MC_max=200000,B = 0.2, n=10)
+Question_1(T=1,nb_pas_MC_max=50000,B = 1, n=10)
