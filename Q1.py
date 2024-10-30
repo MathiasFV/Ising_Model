@@ -7,37 +7,31 @@ def Question_1(T, nb_pas_MC_max, B, n):
 	moments = []
 	capacites = []
 
-	iter_values = np.linspace(100, nb_pas_MC_max, 40)
+	liste_nb_pas_MC = np.linspace(100, nb_pas_MC_max, 40)
 
-	for nb_pas_MC in iter_values:
-		nb_pas_MC = int(nb_pas_MC)
-		print('nb_pas_MC = ',nb_pas_MC)
-		E, C, M = Monte_Carlo(T,nb_pas_MC,B, n)
-		energies.append(E)
-		moments.append(M)
-		capacites.append(C)
+	liste_energies_evolution, liste_capacités_thermiques_évolution, liste_moments_évolution = Monte_Carlo_evolution(T,liste_nb_pas_MC,B, n)
 
 	fig, ax = plt.subplots(3,1, sharex=True, figsize=(10,9))
 	fig.tight_layout(h_pad=2, w_pad=2)
     
 
     # Tracé de l'énergie
-	ax[0].plot(iter_values, energies, label='Énergie')
-	ax[0].set_title(f"Convergence des grandeurs pour T = {T}")
+	ax[0].plot(liste_nb_pas_MC, liste_energies_evolution, label='Énergie')
+#	ax[0].set_title(f"Convergence des grandeurs pour T = {T}")
 	ax[0].set_ylabel('$E$')
  #   ax[0].set_yscale('log')
 	ax[0].grid(visible=True, which="both")
 	ax[0].legend()
 
     # Tracé du moment magnétique
-	ax[1].plot(iter_values, moments, label='Moment magnétique', color='green')
-	ax[1].set_ylabel(r'$\mu$')
+	ax[1].plot(liste_nb_pas_MC, liste_moments_évolution, label='Moment magnétique', color='green')
+	ax[1].set_ylabel(r'$\bar{\mu}$')
 	ax[1].grid(visible=True, which="both")
 #    ax[1].set_yscale('log')
 	ax[1].legend()
 
 	# Tracé de la capacité thermique
-	ax[2].plot(iter_values, capacites, label='Capacité Thermique', color='orange')
+	ax[2].plot(liste_nb_pas_MC, liste_capacités_thermiques_évolution, label='Capacité Thermique', color='orange')
 	ax[2].set_ylabel('$c_v$')
 	ax[2].set_xlabel('Nombre d\'itérations')
 	ax[2].grid(visible=True, which="both")
@@ -48,4 +42,4 @@ def Question_1(T, nb_pas_MC_max, B, n):
 	plt.savefig('Figures/Q1_T='+str(T)+'_nb_pas_MC_max='+str(nb_pas_MC_max)+'_B='+str(B)+'_n='+str(n)+'.pdf', bbox_inches="tight")
 	plt.close()
 	
-Question_1(T=1,nb_pas_MC_max=50000,B = 1, n=10)
+Question_1(T=0.1,nb_pas_MC_max=50000,B = 0, n=10)

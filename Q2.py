@@ -26,7 +26,7 @@ def Question_2(T_min, T_max, nb_pas_MC, B, n):
 
     # Tracé du moment magnétique
 	ax[1].plot(temperatures, moments, color='green')
-	ax[1].set_ylabel(r'$\mu$')
+	ax[1].set_ylabel(r'$\bar{\mu}$')
 	ax[1].grid(visible=True, which="both")
 #    ax[1].set_yscale('log')
 
@@ -41,4 +41,4 @@ def Question_2(T_min, T_max, nb_pas_MC, B, n):
 	plt.savefig('Figures/Q2_nb_pas_MC='+str(nb_pas_MC)+'_T='+str(T)+'_B='+str(B)+'_n='+str(n)+'.pdf', bbox_inches="tight")
 	plt.close()
 	
-Question_2(T_min=0.1, T_max=10, nb_pas_MC=50000, B=0.2, n=10)
+Question_2(T_min=0.1, T_max=5, nb_pas_MC=100000, B=0, n=20)
