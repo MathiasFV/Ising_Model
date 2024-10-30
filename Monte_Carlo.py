@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from random import randint, random
+from numpy import mean
 
 # Fonctions auxiliaires
 def énergie(tab_config,dic_voisins,B):
@@ -21,16 +22,16 @@ def moment(tab_config):
 			liste_mu.append(tab_config[i, j])
 	return mean(liste_mu)
 
-def capacité_thermique(tab_config, dic_voisins, T, B):
-	n = len(tab_config[0])
-	liste_E = []
-	for i in range(n):
-		for j in range(n):
-			E = -B*tab_config[i, j]
-			for (k,l) in dic_voisins[(i,j)]:
-				E += 0.5*tab_config[k,l]*tab_config[i, j]
-			liste_E.append(E)
-	return np.var(liste_E)/(T**2)
+#def capacité_thermique(tab_config, dic_voisins, T, B):
+#	n = len(tab_config[0])
+#	liste_E = []
+#	for i in range(n):
+#		for j in range(n):
+#			E = -B*tab_config[i, j]
+#			for (k,l) in dic_voisins[(i,j)]:
+#				E += 0.5*tab_config[k,l]*tab_config[i, j]
+#			liste_E.append(E)
+#	return np.var(liste_E)/(T**2)
 
 # Algorithme Monte Carlo
 
@@ -80,7 +81,7 @@ def Monte_Carlo(T,nb_pas_MC,B, n):
 				tab_config[i, j] *= -1
 		liste_énergies.append(énergie(tab_config,dic_voisins,B))
 		liste_moments.append(moment(tab_config))
-		liste_capacités_thermiques.append(capacité_thermique(tab_config, dic_voisins, T,B))
+	capacité_thermique = np.var(liste_énergies)/(T**2)
 
-	return np.mean(liste_énergies), np.mean(liste_capacités_thermiques), np.mean(liste_moments)
+	return np.mean(liste_énergies), capacité_thermique, np.mean(liste_moments)
 
