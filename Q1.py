@@ -18,21 +18,21 @@ def Question_1(T, nb_pas_MC_max, B, n):
     # Tracé de l'énergie
 	ax[0].plot(liste_nb_pas_MC, liste_energies_evolution, label='Énergie')
 #	ax[0].set_title(f"Convergence des grandeurs pour T = {T}")
-	ax[0].set_ylabel('$E$')
+	ax[0].set_ylabel(r'$E^{\star}$')
  #   ax[0].set_yscale('log')
 	ax[0].grid(visible=True, which="both")
 	ax[0].legend()
 
     # Tracé du moment magnétique
 	ax[1].plot(liste_nb_pas_MC, liste_moments_évolution, label='Moment magnétique', color='green')
-	ax[1].set_ylabel(r'$\bar{\mu}$')
+	ax[1].set_ylabel(r'$\bar{\mu^{\star}}$')
 	ax[1].grid(visible=True, which="both")
 #    ax[1].set_yscale('log')
 	ax[1].legend()
 
 	# Tracé de la capacité thermique
 	ax[2].plot(liste_nb_pas_MC, liste_capacités_thermiques_évolution, label='Capacité Thermique', color='orange')
-	ax[2].set_ylabel('$c_v$')
+	ax[2].set_ylabel(r'$c_v^{\star}$')
 	ax[2].set_xlabel('Nombre d\'itérations')
 	ax[2].grid(visible=True, which="both")
 	ax[2].set_yscale('log')
@@ -42,4 +42,4 @@ def Question_1(T, nb_pas_MC_max, B, n):
 	plt.savefig('Figures/Q1_T='+str(T)+'_nb_pas_MC_max='+str(nb_pas_MC_max)+'_B='+str(B)+'_n='+str(n)+'.pdf', bbox_inches="tight")
 	plt.close()
 	
-Question_1(T=0.1,nb_pas_MC_max=50000,B = 0, n=10)
+Question_1(T=1,nb_pas_MC_max=1000000,B = 0, n=15)

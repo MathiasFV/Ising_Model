@@ -79,8 +79,10 @@ def Monte_Carlo(T,nb_pas_MC,B, n):
 			P = np.exp(-delta_E/T)
 			if random() < P: # Sinon, il peut être accepté ou refusé selon une probabilité décroissant avec l'augmentation de l'énergie qu'il induit.
 				tab_config[i, j] *= -1
-		liste_énergies.append(énergie(tab_config,dic_voisins,B))
-		liste_moments.append(moment(tab_config))
+		if pas > nb_pas_MC/2:
+			liste_énergies.append(énergie(tab_config,dic_voisins,B))
+			liste_moments.append(moment(tab_config))
+	
 	capacité_thermique = np.var(liste_énergies)/(T**2)
 
 	return np.mean(liste_énergies), capacité_thermique, np.mean(liste_moments)
