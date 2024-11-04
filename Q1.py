@@ -42,4 +42,4 @@ def Question_1(T, nb_pas_MC_max, B, n):
 	plt.savefig('Figures/Q1_T='+str(T)+'_nb_pas_MC_max='+str(nb_pas_MC_max)+'_B='+str(B)+'_n='+str(n)+'.pdf', bbox_inches="tight")
 	plt.close()
 	
-Question_1(T=1,nb_pas_MC_max=1000000,B = 0, n=15)
+Question_1(T=1.5,nb_pas_MC_max=1000000,B = 0.5, n=10)

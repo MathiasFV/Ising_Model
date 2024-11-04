@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from random import randint, random
 from numpy import mean
+from scipy.interpolate import make_interp_spline
 
 # Fonctions auxiliaires
 def énergie(tab_config,dic_voisins,B):
